@@ -1,0 +1,13 @@
+# IDE specific folder
+# .vscode
+
+# if symbolic link
+notes
+# if folder
+notes/
+
+dumps/
+
+drupal/private-files/*
+!drupal/private-files/.gitkeep
+!drupal/private-files/.htaccess
