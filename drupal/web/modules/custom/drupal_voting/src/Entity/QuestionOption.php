@@ -40,7 +40,6 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *   },
  *   base_table = "drupal_voting_question_option",
- *   data_table = "drupal_voting_question_option_field_data",
  *   translatable = TRUE,
  *   admin_permission = "administer drupal_voting_question_option",
  *   entity_keys = {
@@ -52,13 +51,11 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  *   links = {
  *     "collection" = "/admin/content/question-option",
- *     "add-form" = "/question-option/add",
- *     "canonical" = "/question-option/{drupal_voting_question_option}",
+ *     "add-form" = "/question/{question}/options",
  *     "edit-form" = "/question-option/{drupal_voting_question_option}/edit",
  *     "delete-form" = "/question-option/{drupal_voting_question_option}/delete",
  *     "delete-multiple-form" = "/admin/content/question-option/delete-multiple",
  *   },
- *   field_ui_base_route = "entity.drupal_voting_question_option.settings",
  * )
  */
 final class QuestionOption extends ContentEntityBase implements QuestionOptionInterface {
@@ -84,6 +81,11 @@ final class QuestionOption extends ContentEntityBase implements QuestionOptionIn
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
+    $fields['question'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Question'))
+      ->setSetting('target_type', 'drupal_voting_question')
+      ->setRequired(TRUE);
+
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setTranslatable(TRUE)
       ->setLabel(t('Label'))
@@ -91,95 +93,38 @@ final class QuestionOption extends ContentEntityBase implements QuestionOptionIn
       ->setSetting('max_length', 255)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
-        'weight' => -5,
+        'weight' => 1,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'string',
-        'weight' => -5,
+      ->setDisplayConfigurable('form', TRUE);
+
+    $fields['image'] = BaseFieldDefinition::create('image')
+      ->setLabel(t('Image'))
+      ->setSetting('file_extensions', 'png jpg jpeg webp')
+      ->setDisplayOptions('form', [
+        'type' => 'image_image',
+        'weight' => 2,
       ])
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
+      ->setLabel(t('Published'))
       ->setDefaultValue(TRUE)
-      ->setSetting('on_label', 'Enabled')
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
+        'weight' => 3,
       ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'boolean',
-        'label' => 'above',
-        'weight' => 0,
-        'settings' => [
-          'format' => 'enabled-disabled',
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['description'] = BaseFieldDefinition::create('text_long')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Description'))
-      ->setDisplayOptions('form', [
-        'type' => 'text_textarea',
-        'weight' => 10,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'text_default',
-        'label' => 'above',
-        'weight' => 10,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Author'))
+      ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
-      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'author',
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner');
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Authored on'))
-      ->setTranslatable(TRUE)
-      ->setDescription(t('The time that the question option was created.'))
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 20,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+    ->setLabel(t('Created'));
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setTranslatable(TRUE)
-      ->setDescription(t('The time that the question option was last edited.'));
+      ->setLabel(t('Changed'));
 
     return $fields;
   }

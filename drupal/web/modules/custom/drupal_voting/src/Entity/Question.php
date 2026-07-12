@@ -38,8 +38,7 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *   },
  *   base_table = "drupal_voting_question",
- *   data_table = "drupal_voting_question_field_data",
- *   translatable = TRUE,
+ *   translatable = FALSE,
  *   admin_permission = "administer drupal_voting_question",
  *   entity_keys = {
  *     "id" = "id",
@@ -51,12 +50,10 @@ use Drupal\user\EntityOwnerTrait;
  *   links = {
  *     "collection" = "/admin/content/question",
  *     "add-form" = "/question/add",
- *     "canonical" = "/question/{drupal_voting_question}",
  *     "edit-form" = "/question/{drupal_voting_question}/edit",
  *     "delete-form" = "/question/{drupal_voting_question}/delete",
  *     "delete-multiple-form" = "/admin/content/question/delete-multiple",
  *   },
- *   field_ui_base_route = "entity.drupal_voting_question.settings",
  * )
  */
 final class Question extends ContentEntityBase implements QuestionInterface {
@@ -84,7 +81,7 @@ final class Question extends ContentEntityBase implements QuestionInterface {
 
     $fields['label'] = BaseFieldDefinition::create('string')
       ->setTranslatable(TRUE)
-      ->setLabel(t('Label'))
+      ->setLabel(t('Title'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayOptions('form', [
@@ -121,42 +118,11 @@ final class Question extends ContentEntityBase implements QuestionInterface {
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['description'] = BaseFieldDefinition::create('text_long')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Description'))
-      ->setDisplayOptions('form', [
-        'type' => 'text_textarea',
-        'weight' => 10,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'text_default',
-        'label' => 'above',
-        'weight' => 10,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setTranslatable(TRUE)
-      ->setLabel(t('Author'))
+      ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
-      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'author',
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner');
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Authored on'))
@@ -178,7 +144,24 @@ final class Question extends ContentEntityBase implements QuestionInterface {
       ->setLabel(t('Changed'))
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the question was last edited.'));
-
+    $fields['identifier'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Identifier'))
+      ->setDescription(t('Unique identifier used by the API.'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 100)
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 11,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+    $fields['show_results'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Show results after vote'))
+      ->setDefaultValue(TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 12,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
     return $fields;
   }
 

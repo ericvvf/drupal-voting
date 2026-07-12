@@ -30,13 +30,8 @@ use Drupal\user\EntityOwnerTrait;
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "access" = "Drupal\drupal_voting\OptionVoteAccessControlHandler",
  *     "form" = {
- *       "add" = "Drupal\drupal_voting\Form\OptionVoteForm",
- *       "edit" = "Drupal\drupal_voting\Form\OptionVoteForm",
- *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm",
- *       "delete-multiple-confirm" = "Drupal\Core\Entity\Form\DeleteMultipleForm",
- *     },
+ *      },
  *     "route_provider" = {
- *       "html" = "Drupal\drupal_voting\Routing\OptionVoteHtmlRouteProvider",
  *     },
  *   },
  *   base_table = "drupal_voting_optionvote",
@@ -48,14 +43,7 @@ use Drupal\user\EntityOwnerTrait;
  *     "owner" = "uid",
  *   },
  *   links = {
- *     "collection" = "/admin/content/optionvote",
- *     "add-form" = "/optionvote/add",
- *     "canonical" = "/optionvote/{drupal_voting_optionvote}",
- *     "edit-form" = "/optionvote/{drupal_voting_optionvote}",
- *     "delete-form" = "/optionvote/{drupal_voting_optionvote}/delete",
- *     "delete-multiple-form" = "/admin/content/optionvote/delete-multiple",
  *   },
- *   field_ui_base_route = "entity.drupal_voting_optionvote.settings",
  * )
  */
 final class OptionVote extends ContentEntityBase implements OptionVoteInterface {
@@ -81,69 +69,20 @@ final class OptionVote extends ContentEntityBase implements OptionVoteInterface 
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
-      ->setDefaultValue(TRUE)
-      ->setSetting('on_label', 'Enabled')
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'boolean',
-        'label' => 'above',
-        'weight' => 0,
-        'settings' => [
-          'format' => 'enabled-disabled',
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+    $fields['question_option'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Question option'))
+      ->setSetting('target_type', 'drupal_voting_question_option')
+      ->setRequired(TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Author'))
+      ->setLabel(t('User'))
       ->setSetting('target_type', 'user')
-      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner')
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => 60,
-          'placeholder' => '',
-        ],
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'author',
-        'weight' => 15,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
+      ->setRequired(TRUE)
+      ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner');
 
     $fields['created'] = BaseFieldDefinition::create('created')
-      ->setLabel(t('Authored on'))
-      ->setDescription(t('The time that the optionvote was created.'))
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'timestamp',
-        'weight' => 20,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'datetime_timestamp',
-        'weight' => 20,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['changed'] = BaseFieldDefinition::create('changed')
-      ->setLabel(t('Changed'))
-      ->setDescription(t('The time that the optionvote was last edited.'));
+      ->setLabel(t('Created'));
 
     return $fields;
   }
-
 }
