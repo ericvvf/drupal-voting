@@ -48,3 +48,6 @@ tooling:
     service: appserver
     cmd:
       - "php -d memory_limit=-1 /usr/local/bin/composer --working-dir=/app/drupal"
+  mysql:
+    service: database
+    cmd: mysql -u drupal10 -pdrupal10 drupal10
