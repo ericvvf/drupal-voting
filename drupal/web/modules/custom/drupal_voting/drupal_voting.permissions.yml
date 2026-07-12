@@ -1,0 +1,35 @@
+administer drupal_voting_question:
+  title: 'Administer questions'
+  restrict access: true
+view drupal_voting_question:
+  title: 'View question'
+edit drupal_voting_question:
+  title: 'Edit question'
+delete drupal_voting_question:
+  title: 'Delete question'
+create drupal_voting_question:
+  title: 'Create question'
+
+administer drupal_voting_question_option:
+  title: 'Administer question options'
+  restrict access: true
+view drupal_voting_question_option:
+  title: 'View question option'
+edit drupal_voting_question_option:
+  title: 'Edit question option'
+delete drupal_voting_question_option:
+  title: 'Delete question option'
+create drupal_voting_question_option:
+  title: 'Create question option'
+
+administer drupal_voting_optionvote:
+  title: 'Administer optionvotes'
+  restrict access: true
+view drupal_voting_optionvote:
+  title: 'View optionvote'
+edit drupal_voting_optionvote:
+  title: 'Edit optionvote'
+delete drupal_voting_optionvote:
+  title: 'Delete optionvote'
+create drupal_voting_optionvote:
+  title: 'Create optionvote'

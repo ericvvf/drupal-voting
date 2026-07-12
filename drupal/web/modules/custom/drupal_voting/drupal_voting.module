@@ -1,0 +1,143 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Provides a question entity type.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\user\UserInterface;
+
+/**
+ * Implements hook_theme().
+ */
+function drupal_voting_theme(): array {
+  return [
+    'drupal_voting_question' => ['render element' => 'elements'],
+    'drupal_voting_question_option' => ['render element' => 'elements'],
+  ];
+}
+
+/**
+ * Prepares variables for question templates.
+ *
+ * Default template: drupal-voting-question.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the question information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_drupal_voting_question(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+/**
+ * Prepares variables for question option templates.
+ *
+ * Default template: drupal-voting-question-option.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the question option information and any
+ *     fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_drupal_voting_question_option(array &$variables): void {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+}
+
+
+/**
+ * Implements hook_user_cancel().
+ */
+function drupal_voting_user_cancel($edit, UserInterface $account, $method): void {
+  //@TODO move this logic to a service
+  switch ($method) {
+    case 'user_cancel_block_unpublish':
+      // Unpublish questions and question options.
+      $voting_question_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question');
+      $voting_question_option_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question_option');
+    
+      $drupal_voting_question_ids = $voting_question_storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($voting_question_storage->loadMultiple($drupal_voting_question_ids) as $drupal_voting_question) {
+        $drupal_voting_question->set('status', FALSE)->save();
+      }
+ 
+      $drupal_voting_question_option_ids = $voting_question_option_storage->getQuery()
+        ->condition('uid', $account->id())
+        ->condition('status', 1)
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($voting_question_option_storage->loadMultiple($drupal_voting_question_option_ids) as $drupal_voting_question_option) {
+        $drupal_voting_question_option->set('status', FALSE)->save();
+      }
+
+      break;
+
+    case 'user_cancel_reassign':
+      // Anonymize questions and question options.
+      $voting_question_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question');
+      $voting_question_option_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question_option');
+
+      $drupal_voting_question_ids = $voting_question_storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($voting_question_storage->loadMultiple($drupal_voting_question_ids) as $drupal_voting_question) {
+        $drupal_voting_question->setOwnerId(0)->save();
+      }
+      
+      $drupal_voting_question_option_ids = $voting_question_option_storage->getQuery()
+        ->condition('uid', $account->id())
+        ->accessCheck(FALSE)
+        ->execute();
+      foreach ($voting_question_option_storage->loadMultiple($drupal_voting_question_option_ids) as $drupal_voting_question_option) {
+        $drupal_voting_question_option->setOwnerId(0)->save();
+      }
+      
+      break;
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete() for user entities.
+ */
+function drupal_voting_user_predelete(UserInterface $account): void {
+  // Delete questions that belong to this account.
+
+  //@TODO move this logic to a service
+  $voting_question_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question');
+  $question_option_storage = \Drupal::entityTypeManager()->getStorage('drupal_voting_question_option');
+
+  $drupal_voting_question_ids = $voting_question_storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $voting_question_storage->delete(
+    $voting_question_storage->loadMultiple($drupal_voting_question_ids)
+  );
+
+  
+  $drupal_voting_question_option_ids = $question_option_storage->getQuery()
+    ->condition('uid', $account->id())
+    ->accessCheck(FALSE)
+    ->execute();
+  $question_option_storage->delete(
+    $question_option_storage->loadMultiple($drupal_voting_question_option_ids)
+  );
+}
+

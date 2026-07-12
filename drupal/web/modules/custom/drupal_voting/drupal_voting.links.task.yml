@@ -1,0 +1,55 @@
+entity.drupal_voting_question.settings:
+  title: 'Settings'
+  route_name: entity.drupal_voting_question.settings
+  base_route: entity.drupal_voting_question.settings
+entity.drupal_voting_question.view:
+  title: 'View'
+  route_name: entity.drupal_voting_question.canonical
+  base_route: entity.drupal_voting_question.canonical
+entity.drupal_voting_question.edit_form:
+  title: 'Edit'
+  route_name: entity.drupal_voting_question.edit_form
+  base_route: entity.drupal_voting_question.canonical
+entity.drupal_voting_question.delete_form:
+  title: 'Delete'
+  route_name: entity.drupal_voting_question.delete_form
+  base_route: entity.drupal_voting_question.canonical
+  weight: 10
+entity.drupal_voting_question.collection:
+  title: 'Questions'
+  route_name: entity.drupal_voting_question.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.drupal_voting_question_option.settings:
+  title: 'Settings'
+  route_name: entity.drupal_voting_question_option.settings
+  base_route: entity.drupal_voting_question_option.settings
+entity.drupal_voting_question_option.view:
+  title: 'View'
+  route_name: entity.drupal_voting_question_option.canonical
+  base_route: entity.drupal_voting_question_option.canonical
+entity.drupal_voting_question_option.edit_form:
+  title: 'Edit'
+  route_name: entity.drupal_voting_question_option.edit_form
+  base_route: entity.drupal_voting_question_option.canonical
+entity.drupal_voting_question_option.delete_form:
+  title: 'Delete'
+  route_name: entity.drupal_voting_question_option.delete_form
+  base_route: entity.drupal_voting_question_option.canonical
+  weight: 10
+entity.drupal_voting_question_option.collection:
+  title: 'Question Options'
+  route_name: entity.drupal_voting_question_option.collection
+  base_route: system.admin_content
+  weight: 10
+
+entity.drupal_voting_optionvote.settings:
+  title: 'Settings'
+  route_name: entity.drupal_voting_optionvote.settings
+  base_route: entity.drupal_voting_optionvote.settings
+entity.drupal_voting_optionvote.collection:
+  title: 'OptionVotes'
+  route_name: entity.drupal_voting_optionvote.collection
+  base_route: system.admin_content
+  weight: 10

@@ -1,0 +1,23 @@
+entity.drupal_voting_question.settings:
+  path: 'admin/structure/drupal-voting-question'
+  defaults:
+    _form: '\Drupal\drupal_voting\Form\QuestionSettingsForm'
+    _title: 'Question'
+  requirements:
+    _permission: 'administer drupal_voting_question'
+
+entity.drupal_voting_question_option.settings:
+  path: 'admin/structure/drupal-voting-question-option'
+  defaults:
+    _form: '\Drupal\drupal_voting\Form\QuestionOptionSettingsForm'
+    _title: 'Question Option'
+  requirements:
+    _permission: 'administer drupal_voting_question_option'
+
+entity.drupal_voting_optionvote.settings:
+  path: 'admin/structure/drupal-voting-optionvote'
+  defaults:
+    _form: '\Drupal\drupal_voting\Form\OptionVoteSettingsForm'
+    _title: 'OptionVote'
+  requirements:
+    _permission: 'administer drupal_voting_optionvote'

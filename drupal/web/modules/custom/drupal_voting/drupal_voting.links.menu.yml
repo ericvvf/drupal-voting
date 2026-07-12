@@ -1,0 +1,35 @@
+entity.drupal_voting_question.settings:
+  title: 'Question'
+  description: 'Configure a Question entity type.'
+  route_name:  entity.drupal_voting_question.settings
+  parent: system.admin_structure
+
+entity.drupal_voting_question.collection:
+  title: 'Questions'
+  description: 'List of questions.'
+  route_name: entity.drupal_voting_question.collection
+  parent: system.admin_content
+
+entity.drupal_voting_question_option.settings:
+  title: 'Question Option'
+  description: 'Configure a Question Option entity type.'
+  route_name:  entity.drupal_voting_question_option.settings
+  parent: system.admin_structure
+
+entity.drupal_voting_question_option.collection:
+  title: 'Question Options'
+  description: 'List of question options.'
+  route_name: entity.drupal_voting_question_option.collection
+  parent: system.admin_content
+
+entity.drupal_voting_optionvote.settings:
+  title: 'OptionVote'
+  description: 'Configure an OptionVote entity type.'
+  route_name:  entity.drupal_voting_optionvote.settings
+  parent: system.admin_structure
+
+entity.drupal_voting_optionvote.collection:
+  title: 'OptionVotes'
+  description: 'List of optionvotes.'
+  route_name: entity.drupal_voting_optionvote.collection
+  parent: system.admin_content

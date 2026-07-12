@@ -1,0 +1,21 @@
+entity.drupal_voting_question.edit_form:
+  route_name: entity.drupal_voting_question.edit_form
+  group: drupal_voting_question
+  title: 'Edit'
+
+entity.drupal_voting_question.delete_form:
+  route_name: entity.drupal_voting_question.delete_form
+  group: drupal_voting_question
+  title: 'Delete'
+  weight: 10
+
+entity.drupal_voting_question_option.edit_form:
+  route_name: entity.drupal_voting_question_option.edit_form
+  group: drupal_voting_question_option
+  title: 'Edit'
+
+entity.drupal_voting_question_option.delete_form:
+  route_name: entity.drupal_voting_question_option.delete_form
+  group: drupal_voting_question_option
+  title: 'Delete'
+  weight: 10

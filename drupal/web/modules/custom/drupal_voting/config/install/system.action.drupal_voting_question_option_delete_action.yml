@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - drupal_voting
+id: drupal_voting_question_option_delete_action
+label: 'Delete question options'
+type: drupal_voting_question_option
+plugin: entity:delete_action:drupal_voting_question_option
+configuration: {  }
