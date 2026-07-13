@@ -35,6 +35,7 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *   },
  *   base_table = "drupal_voting_optionvote",
+ *   translatable = FALSE,
  *   admin_permission = "administer drupal_voting_optionvote",
  *   entity_keys = {
  *     "id" = "id",
