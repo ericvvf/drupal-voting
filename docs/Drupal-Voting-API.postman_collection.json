@@ -1,0 +1,148 @@
+{
+  "info": {
+    "_postman_id": "d8b6c0d8-2d4a-4cb2-9d8b-2d7d7f8b8d01",
+    "name": "Drupal Voting API",
+    "description": "Postman collection for the Drupal Voting technical challenge.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://drupal-voting.lndo.site"
+    },
+    {
+      "key": "question_identifier",
+      "value": "what-is-your-favourite-cms"
+    },
+    {
+      "key": "option_id",
+      "value": "1"
+    },
+    {
+      "key": "email",
+      "value": "eu@ericvinicius.com.br"
+    }
+  ],
+  "item": [
+    {
+      "name": "Questions",
+      "item": [
+        {
+          "name": "List Questions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/questions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "questions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Question",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/questions/{{question_identifier}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "questions",
+                "{{question_identifier}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Voting",
+      "item": [
+        {
+          "name": "Register Vote",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{email}}\",\n    \"option_id\": {{option_id}}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/questions/{{question_identifier}}/vote",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "questions",
+                "{{question_identifier}}",
+                "vote"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Results",
+      "item": [
+        {
+          "name": "Get Results",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/questions/{{question_identifier}}/results",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "questions",
+                "{{question_identifier}}",
+                "results"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
