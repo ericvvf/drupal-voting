@@ -241,7 +241,7 @@ class VoteForm extends FormBase {
       // Redirect based on show_results setting.
       if ($question->get('show_results')->value) {
         $form_state->setRedirect('drupal_voting.results', [
-          'drupal_voting_question' => $question->id(),
+          'question' => $question->id(),
         ]);
       }
       else {
