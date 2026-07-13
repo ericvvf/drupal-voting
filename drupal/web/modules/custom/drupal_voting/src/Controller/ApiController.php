@@ -121,7 +121,17 @@ final class ApiController extends ControllerBase {
       );
     }
 
+    /**
+     * @var Drupal\user\Entity\User;
+     */
     $user = reset($users);
+
+    if(!$user->isActive()) {
+      return new JsonResponse(
+        ['error' => 'Access Denied'],
+        401
+      );
+    }
 
     // Load the option.
     $option_storage = $this->entityTypeManager->getStorage('drupal_voting_question_option');
