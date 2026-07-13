@@ -1,120 +1,181 @@
-# Quick Start for Drupal 10 and Lando
+# Drupal Voting
 
-**Requirements:** [Lando](https://lando.dev/).
+A simple voting platform built with **Drupal 10.6.12**, developed as a backend technical assessment.
 
-_See [lando-drupal-cms-quick-start](https://github.com/Binbiriz/lando-drupal-cms-quick-start) repository for Drupal CMS Quick Start._
+The project allows administrators to create questions and answer options, while authenticated users can vote once per question through both the Drupal interface and a custom REST API.
 
-All of the bash commands in this document must be run in repo root.
+## Technology Stack
 
-After cloning the repo, you're free to delete the `.git` directory.
+* Drupal 10.6.12
+* PHP 8.3+
+* MySQL
+* Lando
+* Drush
+* Custom Content Entities
+* Custom REST API (no JSON:API)
 
-```bash
-rm -rf ./.git/
+## Features
+
+### Administration
+
+* Create and edit questions.
+* Create and manage answer options.
+* Enable or disable questions.
+* Configure whether voting results are visible after voting.
+* Enable or disable voting globally.
+* View the number of votes received by each answer option.
+
+### Voting
+
+* One vote per user per question.
+* Duplicate votes prevented at the database level.
+* Results displayed according to each question's configuration.
+
+### REST API
+
+* List published questions.
+* Retrieve a question by identifier.
+* Register votes.
+* Retrieve voting results.
+
+## Architecture
+
+The project uses three custom Content Entities:
+
+* **Question**
+* **QuestionOption**
+* **OptionVote**
+
+## Project Structure
+
+```text
+web/modules/custom/drupal_voting
 ```
 
-## Prepare Code base
+contains all custom functionality.
+
+Configuration is stored under:
+
+```text
+config/sync
+```
+
+A Postman collection is available under:
+
+```text
+docs/Drupal-Voting-API.postman_collection.json
+```
+
+## Installation
+
+### Requirements
+
+* Docker
+* Lando
+
+Clone the repository and start Lando:
 
 ```bash
 lando start
 ```
 
-After starting Lando, you will see the URLs. Please do not visit them at this moment.
-
-![Lando Start URLs](https://i.imgur.com/X7ioisD.png)
-
-Continue running the command below:
+Install the project dependencies:
 
 ```bash
-lando composer create-project drupal/recommended-project /app/temp --no-install
-
-rsync -rtv --remove-source-files ./temp/ ./drupal/
-
-find ./temp -type d -empty -delete # or run `rm -rf ./temp/`
-
-rm ./drupal/web/.gitkeep
-
-lando composer install # do not forget to confirm plugins when prompted
+lando composer install
 ```
 
-Install drush
+Import the provided database:
 
 ```bash
-lando composer require "drush/drush"
-
-# Test drush
-lando drush --version
+lando db-import database/drupal_voting.sql.zip
 ```
 
-## Install Site
-
-### Manual Installation via Browser
-
-You can now visit the URLs mentioned above and perform an installation via browser:
-
-![Manual Drupal Installation](https://i.imgur.com/jxMDLac.png)
-
-### Automated Installation via drush
-
-#### Standard Drupal Installation
-
-This will perform a standard Drupal installation:
+Rebuild caches:
 
 ```bash
-# Ref: https://drushcommands.com/drush-9x/site/site:install/
-# drush si --db-url=mysql://root:pass@localhost:port/dbname
-lando drush site-install \
-  standard \
-  --site-name='Drupal using Lando' \
-  --locale=en \
-  --db-url=mysql://drupal10:drupal10@database:3306/drupal10 \
-  --account-name=admin \
-  --account-pass=admin \
-  --yes
+lando drush cr
 ```
 
-![Standard Drupal Installation Home Page](https://i.imgur.com/7Kyh31D.png)
+The application is now ready.
 
-#### Standard Drupal Installation in Another Language
+## Credentials
 
-If you want to perform a standard Drupal installation with a different language, change the `locale` option (in this example `tr` (Turkish) is used):
+Administrator
 
-```bash
-# Ref: https://drushcommands.com/drush-9x/site/site:install/
-# drush si --db-url=mysql://root:pass@localhost:port/dbname
-lando drush site-install \
-  standard \
-  --site-name='Drupal using Lando' \
-  --locale=tr \
-  --db-url=mysql://drupal10:drupal10@database:3306/drupal10 \
-  --account-name=admin \
-  --account-pass=admin \
-  --yes
+```text
+You can log in as admin running ```lando drush uli```
 ```
 
-![Standard Drupal Installation in Another Language Home Page](https://i.imgur.com/wG8D0CD.png)
+Voter accounts
 
-#### Install Umami Demo Profile
-
-This is a multi-lingual Drupal demo containing realistic content:
-
-```bash
-# Ref: https://drushcommands.com/drush-9x/site/site:install/
-# drush si --db-url=mysql://root:pass@localhost:port/dbname
-lando drush site-install \
-  demo_umami \
-  --site-name='Umami Food Magazine' \
-  --db-url=mysql://drupal10:drupal10@database:3306/drupal10 \
-  --account-name=admin \
-  --account-pass=admin \
-  --yes
+```text
+username: eric.vvf
+Password: Lu15M@r1@GAV
 ```
 
-![Drupal Umami Food Magazine Demo Home Page](https://i.imgur.com/dI648Dz.jpeg)
+```text
+Email: eric.lmhv
+Password: Lu15M@r1@
+```
 
-## Admin Interface
+> Replace the password above if different in the provided database.
 
-Visit [https://dev-drupalcore.lndo.site/user/login](https://dev-drupalcore.lndo.site/user/login).
+## REST API
 
-If 'Automated Installation via drush' is used for installation, use `admin` for both username and password.
+### List Questions
 
-![Drupal Login Page](https://i.imgur.com/PT9DdIx.png)
+```http
+GET /api/v1/questions
+```
+
+### Get Question
+
+```http
+GET /api/v1/questions/{identifier}
+```
+
+### Register Vote
+
+```http
+POST /api/v1/questions/{identifier}/vote
+```
+
+Request body
+
+```json
+{
+  "email": "user@example.com",
+  "option_id": 1
+}
+```
+
+### Get Results
+
+```http
+GET /api/v1/questions/{identifier}/results
+```
+
+## Security Notes
+
+* Only published questions are exposed.
+* Users may vote only once per question.
+* Duplicate votes are prevented using a database unique constraint.
+* Business rules are centralized in service classes.
+* Controllers contain only HTTP transport logic.
+
+## Design Decisions
+
+The API identifies voters by their email address.
+
+This decision was made because the assessment does not define an authentication mechanism.
+
+In a production environment, the API should be protected by a proper authentication solution such as OAuth 2.0, OpenID Connect or JWT, with the external application responsible for authenticating its users before invoking the API.
+
+## Testing
+
+A Postman collection is included in the repository to test every available endpoint.
+
+## Author
+
+Eric Vinicius
