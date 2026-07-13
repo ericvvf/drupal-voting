@@ -158,4 +158,21 @@ class QuestionService {
     ];
   }
 
+  /**
+   * Checks whether a Question identifier already exists.
+   */
+  public function identifierExists(string $identifier, int $entityId = NULL): bool {
+    $query = $this->entityTypeManager
+      ->getStorage('drupal_voting_question')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('identifier', $identifier);
+
+    if ($entityId !== NULL) {
+      $query->condition('id', $entityId, '<>');
+    }
+
+    return (bool) $query->range(0, 1)->count()->execute();
+  }
+
 }

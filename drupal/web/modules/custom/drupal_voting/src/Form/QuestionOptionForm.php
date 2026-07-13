@@ -60,7 +60,7 @@ final class QuestionOptionForm extends ContentEntityForm {
     $form_state->setRedirect(
       'entity.drupal_voting_question.options',
       [
-        'drupal_voting_question' => $this->entity->get('question')->target_id,
+        'question' => $this->entity->get('question')->target_id,
       ]
     );
 

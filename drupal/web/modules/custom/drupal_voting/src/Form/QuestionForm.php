@@ -6,12 +6,31 @@ namespace Drupal\drupal_voting\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\drupal_voting\QuestionService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Form controller for the question entity edit forms.
  */
 final class QuestionForm extends ContentEntityForm {
 
+  /**
+   * The question service
+   * @var QuestionService
+   */
+  protected QuestionService $questionService;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): static {
+    /** @var static $form */
+    $form = parent::create($container);
+
+    $form->questionService = $container->get('drupal_voting.question_service');
+
+    return $form;
+  }
 
   /**
    * {@inheritdoc}
@@ -64,7 +83,7 @@ final class QuestionForm extends ContentEntityForm {
       $form_state->setRedirect(
         'entity.drupal_voting_question.options',
         [
-          'drupal_voting_question' => $this->entity->id(),
+          'question' => $this->entity->id(),
         ]
       );
     }
@@ -83,17 +102,9 @@ final class QuestionForm extends ContentEntityForm {
    * Checks whether a Question identifier already exists.
    */
   public function identifierExists(string $identifier): bool {
-    $query = $this->entityTypeManager
-      ->getStorage('drupal_voting_question')
-      ->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('identifier', $identifier);
+    $entityId = !$this->entity->isNew() ? $entityId = $this->entity->id() : NULL;
 
-    if (!$this->entity->isNew()) {
-      $query->condition('id', $this->entity->id(), '<>');
-    }
-
-    return (bool) $query->range(0, 1)->count()->execute();
+    return $this->questionService->identifierExists($identifier, $entityId);
   }
 
 }

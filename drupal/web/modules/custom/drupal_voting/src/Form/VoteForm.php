@@ -14,7 +14,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\file\FileInterface;
 use Drupal\Core\Url;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Form for voting on a question.
