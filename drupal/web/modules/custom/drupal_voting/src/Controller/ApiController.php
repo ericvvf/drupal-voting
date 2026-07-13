@@ -10,6 +10,7 @@ use Drupal\drupal_voting\VotingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * REST API Controller for the Drupal Voting module.
@@ -40,6 +41,11 @@ final class ApiController extends ControllerBase {
    * GET /api/v1/questions - Returns all published questions.
    */
   public function listQuestions(): JsonResponse {
+
+    if ($response = $this->votingDisabledResponse()) {
+      return $response;
+    }
+
     $questions = $this->questionService->getPublishedQuestions();
     $data = [];
     foreach ($questions as $question) {
@@ -55,6 +61,11 @@ final class ApiController extends ControllerBase {
    * GET /api/v1/questions/{identifier} - Returns a single published question.
    */
   public function getQuestion(string $identifier): JsonResponse {
+    
+    if ($response = $this->votingDisabledResponse()) {
+      return $response;
+    }
+    
     $question = $this->questionService->getPublishedQuestionByIdentifier($identifier);
 
     if (!$question) {
@@ -76,6 +87,11 @@ final class ApiController extends ControllerBase {
    * in the body request so that we can register the vote.
    */
   public function vote(string $identifier, Request $request): JsonResponse {
+    
+    if ($response = $this->votingDisabledResponse()) {
+      return $response;
+    }
+
     $question = $this->questionService->getPublishedQuestionByIdentifier($identifier);
 
     if (!$question) {
@@ -184,6 +200,11 @@ final class ApiController extends ControllerBase {
    * GET /api/v1/questions/{identifier}/results - Returns voting results.
    */
   public function results(string $identifier): JsonResponse {
+    
+    if ($response = $this->votingDisabledResponse()) {
+      return $response;
+    }
+
     $question = $this->questionService->getPublishedQuestionByIdentifier($identifier);
 
     if (!$question) {
@@ -203,6 +224,23 @@ final class ApiController extends ControllerBase {
 
     $data = $this->questionService->buildResultsResponse($question);
     return new JsonResponse($data);
+  }
+
+  /**
+    * Returns a response when voting is globally disabled.
+    */
+  private function votingDisabledResponse(): ?JsonResponse {
+    if ($this->votingService->isVotingEnabled()) {
+      return NULL;
+    }
+
+    return new JsonResponse(
+      [
+        'success' => FALSE,
+        'message' => 'Voting is currently disabled.',
+      ],
+      Response::HTTP_FORBIDDEN,
+    );
   }
 
 }

@@ -9,3 +9,10 @@ entity.drupal_voting_question.collection:
   description: 'List of questions.'
   route_name: entity.drupal_voting_question.collection
   parent: system.admin_content
+
+drupal_voting.settings:
+  title: 'Drupal Voting'
+  description: 'Configure global voting settings.'
+  route_name: drupal_voting.settings
+  parent: system.admin_config_system
+  weight: 20

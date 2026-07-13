@@ -42,6 +42,13 @@ final class VotingController extends ControllerBase {
    * Access callback for voting page.
    */
   public function voteAccess(Question $question, AccountInterface $account): AccessResult {
+    
+    // Checking if the voting is globally enabled
+    if (!$this->votingService->isVotingEnabled()) {
+      return AccessResult::forbidden('Voting is globally disabled.')
+        ->addCacheTags(['config:drupal_voting.settings']);
+    }
+    
     // Allow administrators.
     if ($account->hasPermission('administer drupal_voting_question')) {
       return AccessResult::allowed()->cachePerPermissions();
@@ -91,6 +98,13 @@ final class VotingController extends ControllerBase {
    * Access callback for results page.
    */
   public function resultsAccess(Question $question, AccountInterface $account): AccessResult {
+    
+     // Checking if the voting is globally enabled
+    if (!$this->votingService->isVotingEnabled()) {
+      return AccessResult::forbidden('Voting is globally disabled.')
+        ->addCacheTags(['config:drupal_voting.settings']);
+    }
+
     // Allow administrators.
     if ($account->hasPermission('administer drupal_voting_question')) {
       return AccessResult::allowed()->cachePerPermissions();

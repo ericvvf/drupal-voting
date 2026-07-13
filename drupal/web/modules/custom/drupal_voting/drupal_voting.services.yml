@@ -1,7 +1,11 @@
 services:
   drupal_voting.voting_service:
     class: Drupal\drupal_voting\VotingService
-    arguments: ['@entity_type.manager', '@current_user', '@database']
+    arguments: ['@entity_type.manager', '@current_user', '@database', '@config.factory']
   drupal_voting.question_service:
     class: Drupal\drupal_voting\QuestionService
     arguments: ['@entity_type.manager', '@file_url_generator', '@drupal_voting.voting_service']
+  drupal_voting.voting_enabled_access:
+    class: Drupal\drupal_voting\Access\VotingEnabledAccessCheck
+    arguments:
+      - '@drupal_voting.voting_service'

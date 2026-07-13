@@ -57,6 +57,7 @@ drupal_voting.question_list:
     _title: 'Questions'
   requirements:
     _permission: 'vote on questions'
+    _custom_access: 'drupal_voting.voting_enabled_access::access'
 
 # REST API Routes
 drupal_voting.api.questions:
@@ -90,3 +91,10 @@ drupal_voting.api.results:
   methods: [GET]
   requirements:
     _access: 'TRUE'
+drupal_voting.settings:
+  path: '/admin/config/system/drupal-voting'
+  defaults:
+    _form: '\Drupal\drupal_voting\Form\VotingSettingsForm'
+    _title: 'Drupal Voting settings'
+  requirements:
+    _permission: 'administer drupal_voting_question'

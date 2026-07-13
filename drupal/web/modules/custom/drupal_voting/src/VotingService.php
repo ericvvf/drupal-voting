@@ -11,6 +11,7 @@ use Drupal\drupal_voting\Entity\QuestionOption;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\IntegrityConstraintViolationException;
 use Drupal\drupal_voting\Exception\DuplicateVoteException;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Service for handling voting operations.
@@ -38,6 +39,13 @@ class VotingService {
    */
   protected $database;
 
+  /**
+   * The Config Factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
 
   /**
    * Constructs a VotingService object.
@@ -53,10 +61,21 @@ class VotingService {
     EntityTypeManagerInterface $entity_type_manager,
     AccountInterface $current_user,
     Connection $db,
+    ConfigFactoryInterface $config_factory
   ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->currentUser = $current_user;
     $this->database = $db;
+    $this->configFactory = $config_factory;
+  }
+
+  /**
+   * Returns whether voting is globally enabled.
+   */
+  public function isVotingEnabled(): bool {
+    return (bool) $this->configFactory
+      ->get('drupal_voting.settings')
+      ->get('voting_enabled');
   }
 
   /**
@@ -117,6 +136,13 @@ class VotingService {
    *   If the user has already voted on this question.
    */
   public function recordVote(QuestionOption $option, ?AccountInterface $account = NULL) {
+    
+    if (!$this->isVotingEnabled()) {
+      throw new \RuntimeException(
+        'Voting is currently disabled.',
+      );
+    }
+    
     if (!$account) {
       $account = $this->currentUser;
     }
