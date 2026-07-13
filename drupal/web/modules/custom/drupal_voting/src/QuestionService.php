@@ -74,7 +74,8 @@ class QuestionService {
     $question = $question_storage->load(reset($question_ids));
 
     // Only return if published.
-    if (!$question || !$question->get('status')->value) {
+    /** @var \Drupal\drupal_voting\Entity\Question $question */
+    if (!$question || !$question->isPublished()) {
       return NULL;
     }
 
@@ -112,9 +113,9 @@ class QuestionService {
     }
 
     return [
-      'identifier' => $question->get('identifier')->value,
+      'identifier' => $question->getIdentifier(),
       'title' => $question->label(),
-      'show_results' => (bool) $question->get('show_results')->value,
+      'show_results' => $question->shouldShowResults(),
       'options' => $options_data,
     ];
   }
@@ -152,7 +153,7 @@ class QuestionService {
     }
 
     return [
-      'identifier' => $question->get('identifier')->value,
+      'identifier' => $question->getIdentifier(),
       'title' => $question->label(),
       'results' => $formatted_results,
     ];

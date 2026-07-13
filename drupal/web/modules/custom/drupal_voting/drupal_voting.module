@@ -7,7 +7,6 @@ declare(strict_types=1);
  * Provides a question entity type.
  */
 
-use Drupal\Core\Render\Element;
 use Drupal\user\UserInterface;
 use Drupal\Core\Form\FormStateInterface;
 

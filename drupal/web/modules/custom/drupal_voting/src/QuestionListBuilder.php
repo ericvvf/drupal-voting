@@ -70,11 +70,11 @@ final class QuestionListBuilder extends EntityListBuilder {
 
     // Only admins can view these columns
     if (!$this->isVoter()) {
-      $row['identifier'] = $entity->get('identifier')->value;
-      $row['status'] = $entity->get('status')->value
+      $row['identifier'] = $entity->getIdentifier();
+      $row['status'] = $entity->isPublished()
         ? $this->t('Yes')
         : $this->t('No');
-      $row['show_results'] = $entity->get('show_results')->value
+      $row['show_results'] = $entity->shouldShowResults()
         ? $this->t('Yes')
         : $this->t('No');
     }

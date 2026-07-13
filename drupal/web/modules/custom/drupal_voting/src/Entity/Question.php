@@ -162,4 +162,43 @@ final class Question extends ContentEntityBase implements QuestionInterface {
     return $fields;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getIdentifier(): string {
+    return (string) $this->get('identifier')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isPublished(): bool {
+    return (bool) $this->get('status')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function shouldShowResults(): bool {
+    return (bool) $this->get('show_results')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescription(): string {
+    return (string) $this->get('description')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOptions(): array {
+    return \Drupal::entityTypeManager()
+      ->getStorage('drupal_voting_question_option')
+      ->loadByProperties([
+        'question' => $this->id(),
+      ]);
+  }
+
 }

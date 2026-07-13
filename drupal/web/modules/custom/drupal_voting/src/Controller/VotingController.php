@@ -121,7 +121,7 @@ final class VotingController extends ControllerBase {
         $this->t('You have already voted on this question.')
       );
 
-      if ((bool) $question->get('show_results')->value) {
+      if ($question->shouldShowResults()) {
         return $this->redirect(
           'drupal_voting.results',
           [

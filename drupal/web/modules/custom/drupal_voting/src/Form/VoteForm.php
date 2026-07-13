@@ -238,7 +238,7 @@ class VoteForm extends FormBase {
       $this->messenger()->addStatus($this->t('Your vote has been recorded. Thank you!'));
 
       // Redirect based on show_results setting.
-      if ($question->get('show_results')->value) {
+      if ($question->shouldShowResults()) {
         $form_state->setRedirect('drupal_voting.results', [
           'question' => $question->id(),
         ]);

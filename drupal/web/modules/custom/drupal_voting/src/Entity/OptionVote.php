@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\drupal_voting\OptionVoteInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -47,7 +46,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  * )
  */
-final class OptionVote extends ContentEntityBase implements OptionVoteInterface {
+final class OptionVote extends ContentEntityBase {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;

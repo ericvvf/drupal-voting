@@ -44,7 +44,7 @@ final class ApiController extends ControllerBase {
     $data = [];
     foreach ($questions as $question) {
       $data[] = [
-        'identifier' => $question->get('identifier')->value,
+        'identifier' => $question->getIdentifier(),
         'title' => $question->label(),
       ];
     }
@@ -194,7 +194,7 @@ final class ApiController extends ControllerBase {
     }
 
     // Check if results should be shown.
-    if (!$question->get('show_results')->value) {
+    if (!$question->shouldShowResults()) {
       return new JsonResponse(
         ['error' => 'Results are not available for this question'],
         403
