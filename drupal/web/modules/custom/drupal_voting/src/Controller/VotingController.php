@@ -81,6 +81,9 @@ final class VotingController extends ControllerBase {
           'drupal_voting/voting_results',
         ],
       ],
+      '#cache' => [
+        'max-age' => 0,
+      ],
     ];
   }
 

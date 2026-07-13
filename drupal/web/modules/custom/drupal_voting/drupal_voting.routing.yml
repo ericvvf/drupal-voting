@@ -46,6 +46,7 @@ drupal_voting.results:
   requirements:
     _custom_access: '\Drupal\drupal_voting\Controller\VotingController::resultsAccess'
   options:
+    no_cache: TRUE
     parameters:
       question:
         type: entity:drupal_voting_question
