@@ -1,0 +1,9 @@
+uuid: e7256a84-fa6f-441a-9406-f1a7a3ad4645
+langcode: en
+status: true
+dependencies: {  }
+id: voter
+label: Voter
+weight: 4
+is_admin: null
+permissions: {  }

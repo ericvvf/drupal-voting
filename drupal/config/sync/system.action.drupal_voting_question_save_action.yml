@@ -1,0 +1,13 @@
+uuid: 91e24c7b-cf78-4268-891e-c0ab0d717925
+langcode: en
+status: true
+dependencies:
+  module:
+    - drupal_voting
+_core:
+  default_config_hash: doM2LyyPxUEqJwnIMFff1rHCeIymKxd7PYALS4UUzZk
+id: drupal_voting_question_save_action
+label: 'Save questions'
+type: drupal_voting_question
+plugin: 'entity:save_action:drupal_voting_question'
+configuration: {  }

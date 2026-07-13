@@ -1,0 +1,13 @@
+uuid: 4dcefb11-4551-4771-9822-d7f14a09ad21
+langcode: en
+status: true
+dependencies:
+  module:
+    - drupal_voting
+_core:
+  default_config_hash: Qe-PZoON7DoN4-TFaTWmWiSCdNTPrNBMjGI_oye30V0
+id: drupal_voting_question_delete_action
+label: 'Delete questions'
+type: drupal_voting_question
+plugin: 'entity:delete_action:drupal_voting_question'
+configuration: {  }
