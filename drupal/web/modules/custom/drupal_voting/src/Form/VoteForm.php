@@ -103,7 +103,7 @@ class VoteForm extends FormBase {
 
     $form_state->set('question', $question);
 
-    $options = $this->votingService->getPublishedOptions($question);
+    $options = $this->votingService->getQuestionOptions($question);
 
     if (!$options) {
       $form['empty'] = [

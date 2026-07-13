@@ -207,7 +207,7 @@ class VotingService {
    * @return \Drupal\drupal_voting\Entity\QuestionOption[]
    *   Array of published question option entities.
    */
-  public function getPublishedOptions(Question $question): array {
+  public function getQuestionOptions(Question $question): array {
     $option_storage = $this->entityTypeManager->getStorage('drupal_voting_question_option');
 
     $option_ids = $option_storage->getQuery()

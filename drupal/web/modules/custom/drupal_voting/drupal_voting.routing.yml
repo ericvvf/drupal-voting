@@ -57,3 +57,36 @@ drupal_voting.question_list:
     _title: 'Questions'
   requirements:
     _permission: 'vote on questions'
+
+# REST API Routes
+drupal_voting.api.questions:
+  path: '/api/v1/questions'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\ApiController::listQuestions'
+  methods: [GET]
+  requirements:
+    _access: 'TRUE'
+
+drupal_voting.api.question_detail:
+  path: '/api/v1/questions/{identifier}'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\ApiController::getQuestion'
+  methods: [GET]
+  requirements:
+    _access: 'TRUE'
+
+drupal_voting.api.vote:
+  path: '/api/v1/questions/{identifier}/vote'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\ApiController::vote'
+  methods: [POST]
+  requirements:
+    _access: 'TRUE'
+
+drupal_voting.api.results:
+  path: '/api/v1/questions/{identifier}/results'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\ApiController::results'
+  methods: [GET]
+  requirements:
+    _access: 'TRUE'
