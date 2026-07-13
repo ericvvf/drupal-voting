@@ -29,13 +29,13 @@ final class QuestionOptionController extends ControllerBase {
   /**
    * Displays the answer options for a question.
    */
-  public function listing(Question $drupal_voting_question): array {
+  public function listing(Question $question): array {
 
     /** @var \Drupal\drupal_voting\QuestionOptionListBuilder $list_builder */
     $list_builder = $this->entityTypeManager
       ->getListBuilder('drupal_voting_question_option');
 
-    $list_builder->setQuestion($drupal_voting_question);
+    $list_builder->setQuestion($question);
 
     return [
 
@@ -48,7 +48,7 @@ final class QuestionOptionController extends ControllerBase {
           '#url' => Url::fromRoute(
             'entity.drupal_voting_question_option.add_form',
             [
-              'drupal_voting_question' => $drupal_voting_question->id(),
+              'drupal_voting_question' => $question->id(),
             ],
           ),
           '#attributes' => [
@@ -79,9 +79,9 @@ final class QuestionOptionController extends ControllerBase {
   /**
    * Builds the Page title.
    */
-  public function title(Question $drupal_voting_question): string {
+  public function title(Question $question): string {
     return $this->t('Answer Options: @question', [
-      '@question' => $drupal_voting_question->label(),
+      '@question' => $question->label(),
     ]);
   }
 

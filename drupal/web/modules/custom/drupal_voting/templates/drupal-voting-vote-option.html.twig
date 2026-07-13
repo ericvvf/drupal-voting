@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme implementation for a voting answer option.
+ *
+ * Available variables:
+ * - element: The complete radio form element.
+ */
+#}
+
+{% set title = element['#option_title'] %}
+{% set description = element['#option_description'] %}
+{% set image = element['#option_image'] %}
+
+<label class="drupal-voting-option">
+  <span class="drupal-voting-option__control">
+    {{ element }}
+  </span>
+
+  {% if image %}
+    <span class="drupal-voting-option__media">
+      <img
+        class="drupal-voting-option__image"
+        src="{{ image.url }}"
+        alt="{{ image.alt }}"
+        loading="lazy"
+      >
+    </span>
+  {% endif %}
+
+  <span class="drupal-voting-option__content">
+    <span class="drupal-voting-option__title">
+      {{ title }}
+    </span>
+
+    {% if description %}
+      <span class="drupal-voting-option__description">
+        {{ description }}
+      </span>
+    {% endif %}
+  </span>
+</label>

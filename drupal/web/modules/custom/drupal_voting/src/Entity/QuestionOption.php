@@ -121,6 +121,15 @@ final class QuestionOption extends ContentEntityBase implements QuestionOptionIn
         'weight' => 0,
       ]);
 
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Published'))
+      ->setDefaultValue(TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'weight' => 10,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')

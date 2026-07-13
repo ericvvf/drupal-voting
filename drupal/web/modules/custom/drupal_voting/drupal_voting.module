@@ -9,51 +9,25 @@ declare(strict_types=1);
 
 use Drupal\Core\Render\Element;
 use Drupal\user\UserInterface;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_theme().
  */
-function drupal_voting_theme(): array {
+function drupal_voting_theme(array $existing, string $type, string $theme, string $path,): array {
   return [
-    'drupal_voting_question' => ['render element' => 'elements'],
-    'drupal_voting_question_option' => ['render element' => 'elements'],
+    'drupal_voting_vote_option' => [
+      'render element' => 'element',
+      'template' => 'drupal-voting-vote-option',
+    ],
+    'drupal_voting_results' => [
+      'variables' => [
+        'question_title' => NULL,
+        'results' => [],
+        'back_url' => NULL,
+      ],
+    ],
   ];
-}
-
-/**
- * Prepares variables for question templates.
- *
- * Default template: drupal-voting-question.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the question information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_drupal_voting_question(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
-}
-
-/**
- * Prepares variables for question option templates.
- *
- * Default template: drupal-voting-question-option.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the question option information and any
- *     fields attached to the entity.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_drupal_voting_question_option(array &$variables): void {
-  $variables['view_mode'] = $variables['elements']['#view_mode'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
 }
 
 
@@ -141,3 +115,23 @@ function drupal_voting_user_predelete(UserInterface $account): void {
   );
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * 
+ * We could use an Event Subscriber, but we
+ * decide to go with simplicity.
+ */
+function drupal_voting_form_user_login_form_alter(array &$form,FormStateInterface $form_state,): void {
+  $form['#submit'][] = '_drupal_voting_user_login_redirect_submit';
+}
+
+/**
+ * Redirects voters to the question list after login.
+ */
+function _drupal_voting_user_login_redirect_submit(array &$form, FormStateInterface $form_state,): void {
+  $account = \Drupal::currentUser();
+
+  if ($account->isAuthenticated() && in_array('voter', $account->getRoles(), TRUE)) {
+    $form_state->setRedirect('drupal_voting.question_list');
+  }
+}

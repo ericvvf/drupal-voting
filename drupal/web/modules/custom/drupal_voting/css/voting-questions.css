@@ -1,0 +1,102 @@
+table.drupal_voting-voter-list table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+}
+
+table.drupal_voting-voter-list thead {
+  display: none;
+}
+
+table.drupal_voting-voter-list tbody tr {
+  display: block;
+  background: #fff;
+  border: 1px solid #d8dbe2;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+table.drupal_voting-voter-list tbody td {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 1.25rem;
+  border: 0;
+  padding-bottom: 3rem;
+}
+
+table.drupal_voting-voter-list tbody td:first-child {
+  width: calc(100% - 170px);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+table.drupal_voting-voter-list tbody td:last-child {
+  width: 170px;
+  text-align: right;
+}
+
+table.drupal_voting-voter-list tbody td:first-child a {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #222;
+  text-decoration: none;
+}
+
+table.drupal_voting-voter-list tbody td:first-child a:hover {
+  color: #0d6efd;
+}
+
+table.drupal_voting-voter-list .dropbutton-wrapper {
+  margin: 0;
+}
+
+table.drupal_voting-voter-list .dropbutton-widget {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+table.drupal_voting-voter-list .dropbutton {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+table.drupal_voting-voter-list .dropbutton-action {
+  margin: 0;
+}
+
+table.drupal_voting-voter-list .dropbutton-action a {
+  display: inline-block;
+  padding: .7rem 1.4rem;
+  background: #0d6efd;
+  color: #fff;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background .2s ease;
+}
+
+table.drupal_voting-voter-list .dropbutton-action a:hover {
+  background: #0b5ed7;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+
+  table.drupal_voting-voter-list tbody td {
+    display: block;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 1rem;
+  }
+
+  table.drupal_voting-voter-list .dropbutton-action a {
+    width: 100%;
+    text-align: center;
+  }
+
+}

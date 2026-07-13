@@ -1,0 +1,13 @@
+vote_form:
+  version: 1.x
+  css:
+    component:
+      css/vote-form.css: {}
+voting_questions:
+  css:
+    component:
+      css/voting-questions.css: {}
+voting_results:
+  css:
+    component:
+      css/voting_results.css: {}

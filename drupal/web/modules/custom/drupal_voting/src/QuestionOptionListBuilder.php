@@ -14,6 +14,7 @@ use Drupal\drupal_voting\Entity\Question;
 final class QuestionOptionListBuilder extends EntityListBuilder {
 
   protected ?Question $question = NULL;
+  protected array $voteCounts = [];
 
   /**
    * {@inheritdoc}
@@ -21,6 +22,7 @@ final class QuestionOptionListBuilder extends EntityListBuilder {
   public function buildHeader(): array {
 
     $header['label'] = $this->t('Label');
+    $header['votes'] = $this->t('Votes');
     $header['uid'] = $this->t('Author');
     $header['created'] = $this->t('Created');
     $header['changed'] = $this->t('Updated');

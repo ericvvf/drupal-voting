@@ -1,0 +1,54 @@
+.drupal-voting-results {
+  max-width: 900px;
+}
+
+.drupal-voting-result {
+  display: flex;
+  gap: 20px;
+  padding: 18px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.drupal-voting-result__image img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.drupal-voting-result__content {
+  flex: 1;
+}
+
+.drupal-voting-result__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.drupal-voting-result__label {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.drupal-voting-result__votes {
+  color: #666;
+}
+
+.drupal-voting-result__progress {
+  height: 16px;
+  background: #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.drupal-voting-result__progress-fill {
+  height: 100%;
+  background: #0d6efd;
+}
+
+.drupal-voting-results__actions {
+  margin-top: 2rem;
+}

@@ -1,0 +1,54 @@
+<h2 class="drupal-voting-results__title">
+  {{ question_title }}
+</h2>
+
+<div class="drupal-voting-results">
+
+  {% if results %}
+    {% for result in results %}
+      <div class="drupal-voting-result">
+
+        {% if result.image %}
+          <div class="drupal-voting-result__image">
+            <img
+              src="{{ result.image }}"
+              alt="{{ result.label }}">
+          </div>
+        {% endif %}
+
+        <div class="drupal-voting-result__content">
+
+          <div class="drupal-voting-result__header">
+            <span class="drupal-voting-result__label">
+              {{ result.label }}
+            </span>
+
+            <span class="drupal-voting-result__votes">
+              {{ result.votes }} votes ({{ result.percentage }}%)
+            </span>
+          </div>
+
+          <div class="drupal-voting-result__progress">
+
+            <div
+              class="drupal-voting-result__progress-fill"
+              style="width: {{ result.percentage }}%;">
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No votes have been cast yet.</p>
+  {% endif %}
+
+</div>
+
+<div class="drupal-voting-results__actions">
+  <a href="{{ back_url }}" class="button">
+    {{ 'Back to Questions'|t }}
+  </a>
+</div>

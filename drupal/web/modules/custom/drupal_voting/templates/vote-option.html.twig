@@ -1,0 +1,20 @@
+<div class="drupal-voting-option">
+  {% if image %}
+    <img
+      class="drupal-voting-option__image"
+      src="{{ image }}"
+      alt="{{ title }}">
+  {% endif %}
+
+  <div class="drupal-voting-option__content">
+    <div class="drupal-voting-option__title">
+      {{ title }}
+    </div>
+
+    {% if description %}
+      <div class="drupal-voting-option__description">
+        {{ description }}
+      </div>
+    {% endif %}
+  </div>
+</div>

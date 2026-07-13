@@ -1,0 +1,4 @@
+services:
+  drupal_voting.voting_service:
+    class: Drupal\drupal_voting\VotingService
+    arguments: ['@entity_type.manager', '@current_user', '@database']

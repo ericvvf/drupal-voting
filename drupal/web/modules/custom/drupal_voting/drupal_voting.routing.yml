@@ -6,12 +6,16 @@ entity.drupal_voting_question.settings:
   requirements:
     _permission: 'administer drupal_voting_question'
 entity.drupal_voting_question.options:
-  path: '/admin/content/questions/{drupal_voting_question}/options'
+  path: '/admin/content/questions/{question}/options'
   defaults:
     _controller: '\Drupal\drupal_voting\Controller\QuestionOptionController::listing'
     _title_callback: '\Drupal\drupal_voting\Controller\QuestionOptionController::title'
   requirements:
     _permission: 'administer drupal_voting_question'
+  options:
+    parameters:
+      question:
+        type: entity:drupal_voting_question
 entity.drupal_voting_question_option.add_form:
   path: '/admin/content/questions/{drupal_voting_question}/options/add'
   defaults:
@@ -23,3 +27,32 @@ entity.drupal_voting_question_option.add_form:
     parameters:
       drupal_voting_question:
         type: entity:drupal_voting_question
+drupal_voting.vote:
+  path: '/question/{question}/vote'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\VotingController::vote'
+    _title_callback: '\Drupal\drupal_voting\Controller\VotingController::voteTitle'
+  requirements:
+    _custom_access: '\Drupal\drupal_voting\Controller\VotingController::voteAccess'
+  options:
+    parameters:
+      question:
+        type: entity:drupal_voting_question
+drupal_voting.results:
+  path: '/question/{question}/results'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\VotingController::results'
+    _title_callback: '\Drupal\drupal_voting\Controller\VotingController::resultsTitle'
+  requirements:
+    _custom_access: '\Drupal\drupal_voting\Controller\VotingController::resultsAccess'
+  options:
+    parameters:
+      question:
+        type: entity:drupal_voting_question
+drupal_voting.question_list:
+  path: '/voting/questions'
+  defaults:
+    _controller: '\Drupal\drupal_voting\Controller\VotingController::list'
+    _title: 'Questions'
+  requirements:
+    _permission: 'vote on questions'
