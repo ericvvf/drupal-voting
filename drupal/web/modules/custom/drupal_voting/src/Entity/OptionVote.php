@@ -81,6 +81,11 @@ final class OptionVote extends ContentEntityBase implements OptionVoteInterface 
       ->setRequired(TRUE)
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner');
 
+    $fields['question'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Question'))
+      ->setSetting('target_type', 'drupal_voting_question')
+      ->setRequired(TRUE);
+
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Created'));
 

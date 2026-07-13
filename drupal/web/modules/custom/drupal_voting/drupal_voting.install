@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_install().
+ * 
+ * Avoids that a user vote twice in a question.
+ */
+function drupal_voting_install(): void {
+  $schema = \Drupal::database()->schema();
+
+  $schema->addUniqueKey(
+    'drupal_voting_optionvote',
+    'question_uid_unique',
+    [
+      'question',
+      'uid',
+    ],
+  );
+}

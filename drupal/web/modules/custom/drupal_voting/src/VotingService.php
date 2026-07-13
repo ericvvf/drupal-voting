@@ -9,6 +9,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\drupal_voting\Entity\Question;
 use Drupal\drupal_voting\Entity\QuestionOption;
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Database\IntegrityConstraintViolationException;
+use Drupal\drupal_voting\Exception\DuplicateVoteException;
 
 /**
  * Service for handling voting operations.
@@ -119,18 +121,12 @@ class VotingService {
       $account = $this->currentUser;
     }
 
-    // Get the question from the option.
-    $question = $option->get('question')->entity;
-
-    // Check if user has already voted.
-    if ($this->hasUserVoted($question, $account)) {
-      throw new \Exception('User has already voted on this question.');
-    }
     $transaction = $this->database->startTransaction();
 
     try {
       $vote_storage = $this->entityTypeManager->getStorage('drupal_voting_optionvote');
       $vote = $vote_storage->create([
+        'question' => $option->get('question')->entity->id(),
         'question_option' => $option->id(),
         'uid' => $account->id(),
       ]);
@@ -138,10 +134,19 @@ class VotingService {
       unset($transaction);
       return $vote;
     }
-    catch (\Exception $e) {
+
+    catch (IntegrityConstraintViolationException | \Exception $e) {
 
       if (isset($transaction)) {
         $transaction->rollBack();
+      }
+
+      if ($e instanceof IntegrityConstraintViolationException) {
+        throw new DuplicateVoteException(
+          'User has already voted on this question.',
+          0,
+          $e,
+        );
       }
 
       throw $e;
