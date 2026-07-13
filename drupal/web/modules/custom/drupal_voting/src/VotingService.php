@@ -219,22 +219,35 @@ class VotingService {
   }
 
   /**
-   * Returns the vote count for each answer option of a question.
+   * Returns vote totals indexed by question option ID.
    *
-   * @param \Drupal\drupal_voting\Entity\Question $question
-   *   The question.
+   * @param int[] $option_ids
+   *   The question option IDs.
    *
-   * @return array
-   *   An array indexed by question option ID.
-   *   Example:
-   *   [
-   *     5 => 12,
-   *     6 => 3,
-   *     7 => 0,
-   *   ]
+   * @return int[]
+   *   Vote totals indexed by option ID.
    */
-  public function getVoteCountsForQuestion(Question $question): array {
+  public function getVoteCountsByOptionIds(array $option_ids): array {
+    if ($option_ids === []) {
+      return [];
+    }
 
+    $vote_counts = array_fill_keys($option_ids, 0);
+
+    $query = $this->database->select('drupal_voting_optionvote','vote',);
+
+    $query->addField('vote', 'question_option');
+    $query->addExpression('COUNT(vote.id)', 'vote_count');
+
+    $query->condition('vote.question_option',$option_ids,'IN',);
+
+    $query->groupBy('vote.question_option');
+
+    foreach ($query->execute() as $row) {
+      $vote_counts[(int) $row->question_option] = (int) $row->vote_count;
+    }
+
+    return $vote_counts;
   }
 
 }
