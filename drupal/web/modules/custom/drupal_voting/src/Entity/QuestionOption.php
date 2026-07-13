@@ -40,7 +40,7 @@ use Drupal\user\EntityOwnerTrait;
  *     },
  *   },
  *   base_table = "drupal_voting_question_option",
- *   translatable = TRUE,
+ *   translatable = FALSE,
  *   admin_permission = "administer drupal_voting_question_option",
  *   entity_keys = {
  *     "id" = "id",
@@ -87,13 +87,12 @@ final class QuestionOption extends ContentEntityBase implements QuestionOptionIn
       ->setRequired(TRUE);
 
     $fields['label'] = BaseFieldDefinition::create('string')
-      ->setTranslatable(TRUE)
-      ->setLabel(t('Label'))
+      ->setLabel(t('Answer'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayOptions('form', [
         'type' => 'string_textfield',
-        'weight' => 1,
+        'weight' => -1,
       ])
       ->setDisplayConfigurable('form', TRUE);
 
@@ -106,14 +105,21 @@ final class QuestionOption extends ContentEntityBase implements QuestionOptionIn
       ])
       ->setDisplayConfigurable('form', TRUE);
 
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Published'))
-      ->setDefaultValue(TRUE)
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'weight' => 3,
+    $fields['description'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Description'))
+      ->setDescription(t('Short answer description.'))
+      ->setTranslatable(TRUE)
+      ->setRevisionable(TRUE)
+      ->setSetting('max_length', 255)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => 2,
       ])
-      ->setDisplayConfigurable('form', TRUE);
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => 0,
+      ]);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Created by'))
