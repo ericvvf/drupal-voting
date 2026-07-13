@@ -1,9 +1,14 @@
 uuid: e7256a84-fa6f-441a-9406-f1a7a3ad4645
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - drupal_voting
+    - system
 id: voter
 label: Voter
 weight: 4
 is_admin: null
-permissions: {  }
+permissions:
+  - 'view the administration theme'
+  - 'vote on questions'
