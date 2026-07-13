@@ -126,16 +126,26 @@ class VotingService {
     if ($this->hasUserVoted($question, $account)) {
       throw new \Exception('User has already voted on this question.');
     }
+    $transaction = $this->database->startTransaction();
 
-    // Create the vote.
-    $vote_storage = $this->entityTypeManager->getStorage('drupal_voting_optionvote');
-    $vote = $vote_storage->create([
-      'question_option' => $option->id(),
-      'uid' => $account->id(),
-    ]);
-    $vote->save();
+    try {
+      $vote_storage = $this->entityTypeManager->getStorage('drupal_voting_optionvote');
+      $vote = $vote_storage->create([
+        'question_option' => $option->id(),
+        'uid' => $account->id(),
+      ]);
+      $vote->save();
+      unset($transaction);
+      return $vote;
+    }
+    catch (\Exception $e) {
 
-    return $vote;
+      if (isset($transaction)) {
+        $transaction->rollBack();
+      }
+
+      throw $e;
+    }
   }
 
   /**
