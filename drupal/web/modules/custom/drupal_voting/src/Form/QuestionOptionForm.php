@@ -6,40 +6,63 @@ namespace Drupal\drupal_voting\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\drupal_voting\Entity\Question;
 
 /**
- * Form controller for the question option entity edit forms.
+ * Form controller for the Question Option entity.
  */
 final class QuestionOptionForm extends ContentEntityForm {
 
   /**
    * {@inheritdoc}
    */
-  public function save(array $form, FormStateInterface $form_state): int {
-    $result = parent::save($form, $form_state);
+  public function buildForm(array $form, FormStateInterface $form_state, ?Question $drupal_voting_question = NULL, ): array {
 
-    $message_args = ['%label' => $this->entity->toLink()->toString()];
-    $logger_args = [
-      '%label' => $this->entity->label(),
-      'link' => $this->entity->toLink($this->t('View'))->toString(),
-    ];
+    $form = parent::buildForm($form, $form_state);
 
-    switch ($result) {
-      case SAVED_NEW:
-        $this->messenger()->addStatus($this->t('New question option %label has been created.', $message_args));
-        $this->logger('drupal_voting')->notice('New question option %label has been created.', $logger_args);
-        break;
-
-      case SAVED_UPDATED:
-        $this->messenger()->addStatus($this->t('The question option %label has been updated.', $message_args));
-        $this->logger('drupal_voting')->notice('The question option %label has been updated.', $logger_args);
-        break;
-
-      default:
-        throw new \LogicException('Could not save the entity.');
+    // Creating a new option.
+    if ($this->entity->isNew() && $drupal_voting_question) {
+      $this->entity->set('question', $drupal_voting_question->id());
     }
 
-    $form_state->setRedirectUrl($this->entity->toUrl());
+    // The question is defined by the route and should not be editable.
+    if (isset($form['question'])) {
+      $form['question']['#access'] = FALSE;
+    }
+
+    if ($this->entity->isNew()) {
+      $form['actions']['submit']['#value'] = $this->t('Save');
+    }
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state): int {
+
+    $is_new = $this->entity->isNew();
+
+    $result = parent::save($form, $form_state);
+
+    if ($is_new) {
+      $this->messenger()->addStatus(
+        $this->t('Answer option created successfully.')
+      );
+    }
+    else {
+      $this->messenger()->addStatus(
+        $this->t('Answer option updated successfully.')
+      );
+    }
+
+    $form_state->setRedirect(
+      'entity.drupal_voting_question.options',
+      [
+        'drupal_voting_question' => $this->entity->get('question')->target_id,
+      ]
+    );
 
     return $result;
   }

@@ -9,6 +9,17 @@ entity.drupal_voting_question.options:
   path: '/admin/content/questions/{drupal_voting_question}/options'
   defaults:
     _controller: '\Drupal\drupal_voting\Controller\QuestionOptionController::listing'
-    _title: 'Manage Answer Options'
+    _title_callback: '\Drupal\drupal_voting\Controller\QuestionOptionController::title'
   requirements:
     _permission: 'administer drupal_voting_question'
+entity.drupal_voting_question_option.add_form:
+  path: '/admin/content/questions/{drupal_voting_question}/options/add'
+  defaults:
+    _entity_form: 'drupal_voting_question_option.add'
+    _title: 'Add Answer Option'
+  requirements:
+    _permission: 'administer drupal_voting_question'
+  options:
+    parameters:
+      drupal_voting_question:
+        type: entity:drupal_voting_question
