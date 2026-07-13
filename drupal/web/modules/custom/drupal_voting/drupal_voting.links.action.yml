@@ -3,15 +3,3 @@ drupal_voting_question.add_form:
   route_name: entity.drupal_voting_question.add_form
   appears_on:
     - entity.drupal_voting_question.collection
-
-drupal_voting_question_option.add_form:
-  title: 'Add question option'
-  route_name: entity.drupal_voting_question_option.add_form
-  appears_on:
-    - entity.drupal_voting_question_option.collection
-
-drupal_voting_optionvote.add_form:
-  title: 'Add optionvote'
-  route_name: entity.drupal_voting_optionvote.add_form
-  appears_on:
-    - entity.drupal_voting_optionvote.collection
