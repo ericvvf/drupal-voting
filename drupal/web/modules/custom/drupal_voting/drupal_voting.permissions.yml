@@ -22,14 +22,6 @@ delete drupal_voting_question_option:
 create drupal_voting_question_option:
   title: 'Create question option'
 
-administer drupal_voting_optionvote:
-  title: 'Administer optionvotes'
-  restrict access: true
-view drupal_voting_optionvote:
-  title: 'View optionvote'
-edit drupal_voting_optionvote:
-  title: 'Edit optionvote'
-delete drupal_voting_optionvote:
-  title: 'Delete optionvote'
-create drupal_voting_optionvote:
-  title: 'Create optionvote'
+vote on questions:
+  title: 'Vote on questions'
+  description: 'Allows users to access questions and submit votes.'
