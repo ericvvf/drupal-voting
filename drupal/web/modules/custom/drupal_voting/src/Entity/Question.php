@@ -80,7 +80,6 @@ final class Question extends ContentEntityBase implements QuestionInterface {
     $fields = parent::baseFieldDefinitions($entity_type);
 
     $fields['label'] = BaseFieldDefinition::create('string')
-      ->setTranslatable(TRUE)
       ->setLabel(t('Title'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
@@ -96,37 +95,13 @@ final class Question extends ContentEntityBase implements QuestionInterface {
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['status'] = BaseFieldDefinition::create('boolean')
-      ->setLabel(t('Status'))
-      ->setDefaultValue(TRUE)
-      ->setSetting('on_label', 'Enabled')
-      ->setDisplayOptions('form', [
-        'type' => 'boolean_checkbox',
-        'settings' => [
-          'display_label' => FALSE,
-        ],
-        'weight' => 0,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayOptions('view', [
-        'type' => 'boolean',
-        'label' => 'above',
-        'weight' => 0,
-        'settings' => [
-          'format' => 'enabled-disabled',
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
-      ->setTranslatable(TRUE)
       ->setLabel(t('Created by'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(self::class . '::getDefaultEntityOwner');
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Authored on'))
-      ->setTranslatable(TRUE)
       ->setDescription(t('The time that the question was created.'))
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -142,11 +117,10 @@ final class Question extends ContentEntityBase implements QuestionInterface {
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
-      ->setTranslatable(TRUE)
       ->setDescription(t('The time that the question was last edited.'));
     $fields['identifier'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Identifier'))
-      ->setDescription(t('Unique identifier used by the API.'))
+      ->setDescription(t('Unique identifier for the question.'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 100)
       ->setDisplayOptions('form', [
@@ -154,6 +128,29 @@ final class Question extends ContentEntityBase implements QuestionInterface {
         'weight' => 11,
       ])
       ->setDisplayConfigurable('form', TRUE);
+
+    $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Status'))
+      ->setDefaultValue(TRUE)
+      ->setSetting('on_label', 'Enabled')
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => FALSE,
+        ],
+        'weight' => 11,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'type' => 'boolean',
+        'label' => 'above',
+        'weight' => 0,
+        'settings' => [
+          'format' => 'enabled-disabled',
+        ],
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
     $fields['show_results'] = BaseFieldDefinition::create('boolean')
       ->setLabel(t('Show results after vote'))
       ->setDefaultValue(TRUE)
