@@ -1,6 +1,6 @@
 entity.drupal_voting_question.settings:
   title: 'Question'
-  description: 'Create a Question.'
+  description: 'Settings for the Drupal Voting module.'
   route_name:  entity.drupal_voting_question.settings
   parent: system.admin_structure
 
